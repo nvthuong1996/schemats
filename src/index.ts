@@ -56,7 +56,7 @@ export async function typescriptOfTable (db: Database|string,
     let interfaces = ''
     let tableTypes = await db.getTableTypes(table, schema, options)
     interfaces += generateTableTypes(table, tableTypes, options)
-    interfaces += generateTableInterface(table, tableTypes, options)
+    // interfaces += generateTableInterface(table, tableTypes, options)
     return interfaces
 }
 
