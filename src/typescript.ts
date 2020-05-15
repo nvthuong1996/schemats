@@ -57,11 +57,11 @@ export function generateTableTypes (tableNameRaw: string, tableDefinition: Table
         let type = tableDefinition[columnNameRaw].tsType
         let nullable = tableDefinition[columnNameRaw].nullable ? '| null' : ''
         const columnName = options.transformColumnName(columnNameRaw)
-        fields += `export type ${normalizeName(columnName, options)} = ${type}${nullable};\n`
+        fields += `${normalizeName(columnName, options)} : ${type}${nullable};\n`
     })
 
     return `
-        export namespace ${tableName}Fields {
+        export interface ${normalizeName(tableName, options)} {
         ${fields}
         }
     `
