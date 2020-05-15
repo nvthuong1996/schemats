@@ -63,7 +63,7 @@ function generateParamsTableTypes(tableNameRaw, tableDefinition, options) {
             return fields += columnNameRaw + " : " + type + nullable + ";\n";
         }
         else {
-            return fields += columnNameRaw + " ?: " + type + nullable + ";\n | GenericObject";
+            return fields += columnNameRaw + " ?: " + type + nullable + "| GenericObject;\n";
         }
     });
     return "\n        export interface " + normalizeName(tableName, options) + "Params {\n        " + fields + "\n        }\n    ";

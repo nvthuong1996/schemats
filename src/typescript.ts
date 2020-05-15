@@ -77,7 +77,7 @@ export function generateParamsTableTypes(tableNameRaw: string, tableDefinition: 
         if (columnNameRaw === 'shop_id') {
             return fields += `${columnNameRaw} : ${type}${nullable};\n`
         } else {
-            return fields += `${columnNameRaw} ?: ${type}${nullable};\n | GenericObject`
+            return fields += `${columnNameRaw} ?: ${type}${nullable}| GenericObject;\n`
         }
     })
 

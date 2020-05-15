@@ -87,7 +87,7 @@ export async function typescriptOfSchema(db: Database | string,
     if (optionsObject.options.writeHeader) {
         output += buildHeader(db, tables, schema, options)
     }
-    output += `import { GenericClass } from './GenericClass\n\n`
+    output += `import { GenericClass } from './GenericClass'\n`
     output += enumTypes
     output += interfaces
 
