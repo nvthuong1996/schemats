@@ -57,7 +57,7 @@ export function generateTableTypes(tableNameRaw: string, tableDefinition: TableD
         let type = tableDefinition[columnNameRaw].tsType
         let nullable = tableDefinition[columnNameRaw].nullable ? '| null' : ''
         const columnName = options.transformColumnName(columnNameRaw)
-        fields += `${columnNameRaw} : ${type}${nullable};\n`
+        return fields += `${columnNameRaw} ${nullable ? '?' : ''}: ${type}${nullable};\n`
     })
 
     return `
