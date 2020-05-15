@@ -8,7 +8,7 @@ export class MysqlDatabase implements Database {
     private db: mysql.IConnection
     private defaultSchema: string
 
-    constructor (public connectionString: string) {
+    constructor(public connectionString: string) {
         this.db = mysql.createConnection(connectionString)
         let url = urlParse(connectionString, true)
         if (url && url.pathname) {
@@ -20,7 +20,7 @@ export class MysqlDatabase implements Database {
     }
 
     // uses the type mappings from https://github.com/mysqljs/ where sensible
-    private static mapTableDefinitionToType (tableDefinition: TableDefinition, customTypes: string[], options: Options): TableDefinition {
+    private static mapTableDefinitionToType(tableDefinition: TableDefinition, customTypes: string[], options: Options): TableDefinition {
         if (!options) throw new Error()
         return mapValues(tableDefinition, column => {
             switch (column.udtName) {
@@ -53,7 +53,7 @@ export class MysqlDatabase implements Database {
                     column.tsType = 'boolean'
                     return column
                 case 'json':
-                    column.tsType = 'Object'
+                    column.tsType = 'Record<string, any>'
                     return column
                 case 'date':
                 case 'datetime':
@@ -82,19 +82,19 @@ export class MysqlDatabase implements Database {
         })
     }
 
-    private static parseMysqlEnumeration (mysqlEnum: string): string[] {
+    private static parseMysqlEnumeration(mysqlEnum: string): string[] {
         return mysqlEnum.replace(/(^(enum|set)\('|'\)$)/gi, '').split(`','`)
     }
 
-    private static getEnumNameFromColumn (dataType: string, columnName: string): string {
+    private static getEnumNameFromColumn(dataType: string, columnName: string): string {
         return `${dataType}_${columnName}`
     }
 
-    public query (queryString: string) {
+    public query(queryString: string) {
         return this.queryAsync(queryString)
     }
 
-    public async getEnumTypes (schema?: string) {
+    public async getEnumTypes(schema?: string) {
         let enums: any = {}
         let enumSchemaWhereClause: string
         let params: string[]
@@ -124,7 +124,7 @@ export class MysqlDatabase implements Database {
         return enums
     }
 
-    public async getTableDefinition (tableName: string, tableSchema: string) {
+    public async getTableDefinition(tableName: string, tableSchema: string) {
         let tableDefinition: TableDefinition = {}
 
         const tableColumns = await this.queryAsync(
@@ -144,13 +144,13 @@ export class MysqlDatabase implements Database {
         return tableDefinition
     }
 
-    public async getTableTypes (tableName: string, tableSchema: string, options: Options) {
+    public async getTableTypes(tableName: string, tableSchema: string, options: Options) {
         const enumTypes: any = await this.getEnumTypes(tableSchema)
         let customTypes = keys(enumTypes)
         return MysqlDatabase.mapTableDefinitionToType(await this.getTableDefinition(tableName, tableSchema), customTypes, options)
     }
 
-    public async getSchemaTables (schemaName: string): Promise<string[]> {
+    public async getSchemaTables(schemaName: string): Promise<string[]> {
         const schemaTables = await this.queryAsync(
             'SELECT table_name ' +
             'FROM information_schema.columns ' +
@@ -161,7 +161,7 @@ export class MysqlDatabase implements Database {
         return schemaTables.map((schemaItem: { table_name: string }) => schemaItem.table_name)
     }
 
-    public queryAsync (queryString: string, escapedValues?: Array<string>): Promise<Object[]> {
+    public queryAsync(queryString: string, escapedValues?: Array<string>): Promise<Object[]> {
         return new Promise((resolve, reject) => {
             this.db.query(queryString, escapedValues, (error: Error, results: Array<Object>) => {
                 if (error) {
@@ -172,7 +172,7 @@ export class MysqlDatabase implements Database {
         })
     }
 
-    public getDefaultSchema (): string {
+    public getDefaultSchema(): string {
         return this.defaultSchema
     }
 }
