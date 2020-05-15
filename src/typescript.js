@@ -59,12 +59,7 @@ function generateParamsTableTypes(tableNameRaw, tableDefinition, options) {
         var type = tableDefinition[columnNameRaw].tsType;
         var nullable = tableDefinition[columnNameRaw].nullable ? '| null' : '';
         var columnName = options.transformColumnName(columnNameRaw);
-        if (columnNameRaw === 'shop_id') {
-            return fields += columnNameRaw + " : " + type + nullable + ";\n";
-        }
-        else {
-            return fields += columnNameRaw + " ?: " + type + nullable + "| GenericObject;\n";
-        }
+        return fields += columnNameRaw + " ?: " + type + nullable + "| GenericObject;\n";
     });
     return "\n        export interface " + normalizeName(tableName, options) + "Params {\n        " + fields + "\n        }\n    ";
 }

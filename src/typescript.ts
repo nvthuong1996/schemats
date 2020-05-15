@@ -74,11 +74,9 @@ export function generateParamsTableTypes(tableNameRaw: string, tableDefinition: 
         let type = tableDefinition[columnNameRaw].tsType
         let nullable = tableDefinition[columnNameRaw].nullable ? '| null' : ''
         const columnName = options.transformColumnName(columnNameRaw)
-        if (columnNameRaw === 'shop_id') {
-            return fields += `${columnNameRaw} : ${type}${nullable};\n`
-        } else {
-            return fields += `${columnNameRaw} ?: ${type}${nullable}| GenericObject;\n`
-        }
+
+        return fields += `${columnNameRaw} ?: ${type}${nullable}| GenericObject;\n`
+
     })
 
     return `
