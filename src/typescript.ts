@@ -58,6 +58,9 @@ export function generateTableTypes(tableNameRaw: string, tableDefinition: TableD
         if (type === "Date") {
             type = "Date | number"
         }
+        if (type === "boolean") {
+            type = "boolean | number"
+        }
         let nullable = tableDefinition[columnNameRaw].nullable ? '| null' : ''
         const columnName = options.transformColumnName(columnNameRaw)
         return fields += `${columnNameRaw} ?: ${type}${nullable};\n`
@@ -77,6 +80,9 @@ export function generateParamsTableTypes(tableNameRaw: string, tableDefinition: 
         let type = tableDefinition[columnNameRaw].tsType
         if (type === "Date") {
             type = "Date | number"
+        }
+        if (type === "boolean") {
+            type = "boolean | number"
         }
         let nullable = tableDefinition[columnNameRaw].nullable ? '| null' : ''
         const columnName = options.transformColumnName(columnNameRaw)

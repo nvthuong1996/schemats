@@ -48,6 +48,9 @@ function generateTableTypes(tableNameRaw, tableDefinition, options) {
         if (type === "Date") {
             type = "Date | number";
         }
+        if (type === "boolean") {
+            type = "boolean | number";
+        }
         var nullable = tableDefinition[columnNameRaw].nullable ? '| null' : '';
         var columnName = options.transformColumnName(columnNameRaw);
         return fields += columnNameRaw + " ?: " + type + nullable + ";\n";
@@ -62,6 +65,9 @@ function generateParamsTableTypes(tableNameRaw, tableDefinition, options) {
         var type = tableDefinition[columnNameRaw].tsType;
         if (type === "Date") {
             type = "Date | number";
+        }
+        if (type === "boolean") {
+            type = "boolean | number";
         }
         var nullable = tableDefinition[columnNameRaw].nullable ? '| null' : '';
         var columnName = options.transformColumnName(columnNameRaw);
