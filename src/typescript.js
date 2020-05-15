@@ -45,6 +45,9 @@ function generateTableTypes(tableNameRaw, tableDefinition, options) {
     var fields = '';
     Object.keys(tableDefinition).forEach(function (columnNameRaw) {
         var type = tableDefinition[columnNameRaw].tsType;
+        if (type === "Date") {
+            type = "Date | number";
+        }
         var nullable = tableDefinition[columnNameRaw].nullable ? '| null' : '';
         var columnName = options.transformColumnName(columnNameRaw);
         return fields += columnNameRaw + " ?: " + type + nullable + ";\n";
@@ -57,6 +60,9 @@ function generateParamsTableTypes(tableNameRaw, tableDefinition, options) {
     var fields = '';
     Object.keys(tableDefinition).forEach(function (columnNameRaw) {
         var type = tableDefinition[columnNameRaw].tsType;
+        if (type === "Date") {
+            type = "Date | number";
+        }
         var nullable = tableDefinition[columnNameRaw].nullable ? '| null' : '';
         var columnName = options.transformColumnName(columnNameRaw);
         return fields += columnNameRaw + " ?: " + type + nullable + "| GenericObject;\n";

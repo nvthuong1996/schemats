@@ -55,6 +55,9 @@ export function generateTableTypes(tableNameRaw: string, tableDefinition: TableD
     let fields = ''
     Object.keys(tableDefinition).forEach((columnNameRaw) => {
         let type = tableDefinition[columnNameRaw].tsType
+        if (type === "Date") {
+            type = "Date | number"
+        }
         let nullable = tableDefinition[columnNameRaw].nullable ? '| null' : ''
         const columnName = options.transformColumnName(columnNameRaw)
         return fields += `${columnNameRaw} ?: ${type}${nullable};\n`
@@ -72,6 +75,9 @@ export function generateParamsTableTypes(tableNameRaw: string, tableDefinition: 
     let fields = ''
     Object.keys(tableDefinition).forEach((columnNameRaw) => {
         let type = tableDefinition[columnNameRaw].tsType
+        if (type === "Date") {
+            type = "Date | number"
+        }
         let nullable = tableDefinition[columnNameRaw].nullable ? '| null' : ''
         const columnName = options.transformColumnName(columnNameRaw)
 
