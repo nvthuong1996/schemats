@@ -86,7 +86,7 @@ var MysqlDatabase = /** @class */ (function () {
                     column.tsType = 'boolean';
                     return column;
                 case 'json':
-                    column.tsType = 'Object';
+                    column.tsType = 'Record<string, any>';
                     return column;
                 case 'date':
                 case 'datetime':
