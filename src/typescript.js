@@ -73,7 +73,7 @@ function generateParamsTableTypes(tableNameRaw, tableDefinition, options) {
         var columnName = options.transformColumnName(columnNameRaw);
         return fields += columnNameRaw + " ?: " + type + nullable + "| GenericObject;\n";
     });
-    return "\n        export interface " + normalizeName(tableName, options) + "Params {\n        " + fields + "\n        }\n    ";
+    return "\n        export interface " + normalizeName(tableName, options) + "Query {\n        " + fields + "\n        }\n    ";
 }
 exports.generateParamsTableTypes = generateParamsTableTypes;
 //# sourceMappingURL=typescript.js.map

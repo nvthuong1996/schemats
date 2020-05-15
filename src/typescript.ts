@@ -92,7 +92,7 @@ export function generateParamsTableTypes(tableNameRaw: string, tableDefinition: 
     })
 
     return `
-        export interface ${normalizeName(tableName, options)}Params {
+        export interface ${normalizeName(tableName, options)}Query {
         ${fields}
         }
     `
