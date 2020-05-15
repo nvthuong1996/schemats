@@ -57,11 +57,32 @@ export function generateTableTypes(tableNameRaw: string, tableDefinition: TableD
         let type = tableDefinition[columnNameRaw].tsType
         let nullable = tableDefinition[columnNameRaw].nullable ? '| null' : ''
         const columnName = options.transformColumnName(columnNameRaw)
-        return fields += `${columnNameRaw} ${nullable ? '?' : ''}: ${type}${nullable};\n`
+        return fields += `${columnNameRaw} ?: ${type}${nullable};\n`
     })
 
     return `
         export interface ${normalizeName(tableName, options)}Entity {
+        ${fields}
+        }
+    `
+}
+
+export function generateParamsTableTypes(tableNameRaw: string, tableDefinition: TableDefinition, options: Options) {
+    const tableName = options.transformTypeName(tableNameRaw)
+    let fields = ''
+    Object.keys(tableDefinition).forEach((columnNameRaw) => {
+        let type = tableDefinition[columnNameRaw].tsType
+        let nullable = tableDefinition[columnNameRaw].nullable ? '| null' : ''
+        const columnName = options.transformColumnName(columnNameRaw)
+        if (columnNameRaw === 'shop_id') {
+            return fields += `${columnNameRaw} : ${type}${nullable};\n`
+        } else {
+            return fields += `${columnNameRaw} ?: ${type}${nullable};\n | GenericObject`
+        }
+    })
+
+    return `
+        export interface ${normalizeName(tableName, options)}Params {
         ${fields}
         }
     `

@@ -85,7 +85,7 @@ function typescriptOfTable(db, table, schema, options) {
                 case 1:
                     tableTypes = _a.sent();
                     interfaces += typescript_1.generateTableTypes(table, tableTypes, options);
-                    // interfaces += generateTableInterface(table, tableTypes, options)
+                    interfaces += typescript_1.generateParamsTableTypes(table, tableTypes, options);
                     return [2 /*return*/, interfaces];
             }
         });
@@ -127,6 +127,7 @@ function typescriptOfSchema(db, tables, schema, options) {
                     if (optionsObject.options.writeHeader) {
                         output += buildHeader(db, tables, schema, options);
                     }
+                    output += "import { GenericClass } from './GenericClass\n\n";
                     output += enumTypes;
                     output += interfaces;
                     formatterOption = {

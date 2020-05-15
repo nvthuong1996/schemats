@@ -47,9 +47,26 @@ function generateTableTypes(tableNameRaw, tableDefinition, options) {
         var type = tableDefinition[columnNameRaw].tsType;
         var nullable = tableDefinition[columnNameRaw].nullable ? '| null' : '';
         var columnName = options.transformColumnName(columnNameRaw);
-        return fields += columnNameRaw + " " + (nullable ? '?' : '') + ": " + type + nullable + ";\n";
+        return fields += columnNameRaw + " ?: " + type + nullable + ";\n";
     });
     return "\n        export interface " + normalizeName(tableName, options) + "Entity {\n        " + fields + "\n        }\n    ";
 }
 exports.generateTableTypes = generateTableTypes;
+function generateParamsTableTypes(tableNameRaw, tableDefinition, options) {
+    var tableName = options.transformTypeName(tableNameRaw);
+    var fields = '';
+    Object.keys(tableDefinition).forEach(function (columnNameRaw) {
+        var type = tableDefinition[columnNameRaw].tsType;
+        var nullable = tableDefinition[columnNameRaw].nullable ? '| null' : '';
+        var columnName = options.transformColumnName(columnNameRaw);
+        if (columnNameRaw === 'shop_id') {
+            return fields += columnNameRaw + " : " + type + nullable + ";\n";
+        }
+        else {
+            return fields += columnNameRaw + " ?: " + type + nullable + ";\n | GenericObject";
+        }
+    });
+    return "\n        export interface " + normalizeName(tableName, options) + "Params {\n        " + fields + "\n        }\n    ";
+}
+exports.generateParamsTableTypes = generateParamsTableTypes;
 //# sourceMappingURL=typescript.js.map

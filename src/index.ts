@@ -3,13 +3,13 @@
  * Created by xiamx on 2016-08-10.
  */
 
-import { generateEnumType, generateTableTypes, generateTableInterface } from './typescript'
+import { generateEnumType, generateTableTypes, generateParamsTableTypes } from './typescript'
 import { getDatabase, Database } from './schema'
 import Options, { OptionValues } from './options'
 import { processString, Options as ITFOptions } from 'typescript-formatter'
 const pkgVersion = require('../package.json').version
 
-function getTime () {
+function getTime() {
     let padTime = (value: number) => `0${value}`.slice(-2)
     let time = new Date()
     const yyyy = time.getFullYear()
@@ -21,8 +21,8 @@ function getTime () {
     return `${yyyy}-${MM}-${dd} ${hh}:${mm}:${ss}`
 }
 
-function buildHeader (db: Database, tables: string[], schema: string|null, options: OptionValues): string {
-    let commands = ['schemats', 'generate', '-c', db.connectionString.replace(/:\/\/.*@/,'://username:password@')]
+function buildHeader(db: Database, tables: string[], schema: string | null, options: OptionValues): string {
+    let commands = ['schemats', 'generate', '-c', db.connectionString.replace(/:\/\/.*@/, '://username:password@')]
     if (options.camelCase) commands.push('-C')
     if (tables.length > 0) {
         tables.forEach((t: string) => {
@@ -45,10 +45,10 @@ function buildHeader (db: Database, tables: string[], schema: string|null, optio
     `
 }
 
-export async function typescriptOfTable (db: Database|string, 
-                                         table: string,
-                                         schema: string,
-                                         options = new Options()) {
+export async function typescriptOfTable(db: Database | string,
+    table: string,
+    schema: string,
+    options = new Options()) {
     if (typeof db === 'string') {
         db = getDatabase(db)
     }
@@ -56,14 +56,14 @@ export async function typescriptOfTable (db: Database|string,
     let interfaces = ''
     let tableTypes = await db.getTableTypes(table, schema, options)
     interfaces += generateTableTypes(table, tableTypes, options)
-    // interfaces += generateTableInterface(table, tableTypes, options)
+    interfaces += generateParamsTableTypes(table, tableTypes, options)
     return interfaces
 }
 
-export async function typescriptOfSchema (db: Database|string,
-                                          tables: string[] = [],
-                                          schema: string|null = null,
-                                          options: OptionValues = {}): Promise<string> {
+export async function typescriptOfSchema(db: Database | string,
+    tables: string[] = [],
+    schema: string | null = null,
+    options: OptionValues = {}): Promise<string> {
     if (typeof db === 'string') {
         db = getDatabase(db)
     }
@@ -87,6 +87,7 @@ export async function typescriptOfSchema (db: Database|string,
     if (optionsObject.options.writeHeader) {
         output += buildHeader(db, tables, schema, options)
     }
+    output += `import { GenericClass } from './GenericClass\n\n`
     output += enumTypes
     output += interfaces
 
@@ -108,5 +109,5 @@ export async function typescriptOfSchema (db: Database|string,
     return processedResult.dest
 }
 
-export {Database, getDatabase} from './schema'
-export {Options, OptionValues}
+export { Database, getDatabase } from './schema'
+export { Options, OptionValues }
