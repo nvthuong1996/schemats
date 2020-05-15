@@ -127,7 +127,7 @@ function typescriptOfSchema(db, tables, schema, options) {
                     if (optionsObject.options.writeHeader) {
                         output += buildHeader(db, tables, schema, options);
                     }
-                    output += "import { GenericClass } from './GenericClass'\n";
+                    output += "import { GenericObject } from 'moleculer'\n";
                     output += enumTypes;
                     output += interfaces;
                     formatterOption = {
