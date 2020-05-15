@@ -47,7 +47,7 @@ function generateTableTypes(tableNameRaw, tableDefinition, options) {
         var type = tableDefinition[columnNameRaw].tsType;
         var nullable = tableDefinition[columnNameRaw].nullable ? '| null' : '';
         var columnName = options.transformColumnName(columnNameRaw);
-        fields += columnName + " : " + type + nullable + ";\n";
+        fields += columnNameRaw + " : " + type + nullable + ";\n";
     });
     return "\n        export interface " + normalizeName(tableName, options) + "Entity {\n        " + fields + "\n        }\n    ";
 }
